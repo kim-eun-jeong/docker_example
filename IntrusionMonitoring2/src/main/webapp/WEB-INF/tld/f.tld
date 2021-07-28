@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee " xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance "
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee  http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd "
+	version="2.0">
+	<description>JSTL 1.1 functions library</description>
+	<display-name>JSTL functions</display-name>
+	<tlib-version>1.1</tlib-version>
+	<short-name>f</short-name>
+
+	<function>
+		<description>Unit Change(KB -> MB,GB,TB)</description>
+		<name>unitChange</name>
+		<function-class>com.acorndynamics.acorn.admin.utils.TldUtils</function-class>
+		<function-signature>String unitChange( java.lang.Float, java.lang.String )</function-signature>
+		<example>
+			${ f:unitChange() }
+		</example>
+	</function>
+	
+	<function>
+		<description>Unit Change(KB -> MB,GB,TB)</description>
+		<name>unitChangeNum</name>
+		<function-class>com.acorndynamics.acorn.admin.utils.TldUtils</function-class>
+		<function-signature>String unitChangeNum( java.lang.Float )</function-signature>
+		<example>
+			${ f:unitChangeNum() }
+		</example>
+	</function>
+	
+	<function>
+		<description>Textarea Change</description>
+		<name>textareaChange</name>
+		<function-class>com.acorndynamics.acorn.admin.utils.TldUtils</function-class>
+		<function-signature>String textareaChange( java.lang.String )</function-signature>
+		<example>
+			${ f:textareaChange() }
+		</example>
+	</function>
+	
+	<function>
+		<description>String Value Null Change(null, '' -> '-')</description>
+		<name>nullToHyphen</name>
+		<function-class>com.acorndynamics.acorn.admin.utils.TldUtils</function-class>
+		<function-signature>String nullToHyphen( java.lang.String )</function-signature>
+		<example>
+			${ f:nullToHyphen() }
+		</example>
+	</function>
+	
+	<function>
+		<description>Date Value Null Change(null, '' -> '-')</description>
+		<name>dateNullToHyphen</name>
+		<function-class>com.acorndynamics.acorn.admin.utils.TldUtils</function-class>
+		<function-signature>String dateNullToHyphen( java.util.Date, java.lang.String )</function-signature>
+		<example>
+			${ f:dateNullToHyphen() }
+		</example>
+	</function>
+
+</taglib>

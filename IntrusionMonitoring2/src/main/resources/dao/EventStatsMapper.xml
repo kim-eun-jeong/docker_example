@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="kr.co.enitt.intrusionMonitoring.dao.EventStatsDAO">
+	<select id="getEventStatsTimeList" parameterType="CommonVO" resultType="EventStatsVO">
+		<![CDATA[ 
+		SELECT 			 
+								DATE_FORMAT(E.event_time, '%Y-%m-%d %H') 	AS eventDate
+			                	,DATE_FORMAT(E.event_time, '%d') 					AS eventDateGroup
+			                	,E.event_code											AS eventCode
+		                        ,COUNT(E.event_id)										AS eventCount
+                            
+		FROM 				tb_event E
+		WHERE  				1=1
+		AND 					E.event_time BETWEEN DATE_SUB(NOW(), INTERVAL 24 HOUR)  AND  now()
+		GROUP BY 			DATE_FORMAT(E.event_time, '%Y-%m-%d %H'),DATE_FORMAT(E.event_time, '%d'),E.event_code
+		]]>
+	</select>
+	
+	
+	<select id="getEventStatsDayList" parameterType="CommonVO" resultType="EventStatsVO">
+		<![CDATA[ 
+		SELECT  		
+								DC.date_ymd 								AS eventDate 
+								,DATE_FORMAT(DC.date_ymd , '%d') 	AS eventDateGroup
+		                        ,DC. code_id 									AS eventCode
+		                        ,DC. code_name 							AS eventCodeName
+		                        ,IFNULL(E.event_count,0)					AS eventCount
+		                        ,E.event_count								AS eventCountNull
+		                        
+		FROM (
+		                        SELECT 
+		                                                  	DT.date_ymd 
+		                                                  	,EC. code_id
+		                                                  	,EC. code_name 
+		                        FROM 				
+		                                                    (
+		                                                                    SELECT                   
+		                                                                                        CURDATE() - INTERVAL (A.a + (10 * B.a) + (100 * C.a) + (1000 * D.a)  - 5000) DAY as date_ymd
+		                                                                    FROM 		 
+		                                                                                    
+		                                                                                        (
+		                                                                                            SELECT		0 AS a UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
+		                                                                                        ) AS A
+		                                                                                        CROSS JOIN (
+		                                                                                              SELECT 	0 AS a UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
+		                                                                                        ) AS B
+		                                                                                        CROSS JOIN (
+		                                                                                              SELECT 	0 AS a UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
+		                                                                                        ) AS C
+		                                                                                        CROSS JOIN (
+		                                                                                              SELECT 	0 AS a UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
+		                                                                                        ) AS D
+		                                                    ) AS DT ,
+		                                                    (
+		                                                                    SELECT
+		                                                                                        C.code_id ,
+		                                                                                        C.code_name
+		                                                                    FROM		   tb_code C
+		                                                                    WHERE   	  C.parent_code_id = 'EVENT'
+		                                                                    AND     	     C.code_use_yn    = 'Y'
+		]]>
+															<if test=' searchDayCode != null and searchDayCode != "" '>
+																<![CDATA[ AND C.code_id = #{searchDayCode} ]]>
+															</if>
+		<![CDATA[
+		                                                    ) AS EC
+		                        WHERE    			1=1
+		                        AND         			DT.date_ymd BETWEEN #{searchDayFirst} AND #{searchDayLast}
+		) DC
+		 LEFT JOIN
+		                        (
+		
+		                        	SELECT
+		                                   			    DATE_FORMAT(E.event_time, '%Y-%m-%d') 		AS event_time 
+		                                   			    ,count(0)                              				AS event_count
+		                                                ,E.event_code
+		                          	FROM             tb_event E
+		                          	WHERE           1=1
+		                          	AND				   DATE_FORMAT(E.event_time, '%Y-%m') =  #{searchDay}
+		]]>
+					<if test=' searchDayCode != null and searchDayCode != "" '>
+						<![CDATA[ AND E.event_code = #{searchDayCode} ]]>
+					</if>
+		<![CDATA[                       
+		                          	GROUP BY 	 DATE_FORMAT(E.event_time, '%Y-%m-%d'),
+		                                   				  E.event_code
+		                        ) E	
+		ON 					(
+									DC.date_ymd = E.event_time 
+		                            AND 
+		                           DC.code_id =  E.event_code
+								)
+		ORDER BY 		DC.date_ymd ASC, DC. code_id ASC
+		]]>
+	</select>
+	
+	<select id="getEventStatsMonthList" parameterType="CommonVO" resultType="EventStatsVO">
+		<![CDATA[ 
+			SELECT  		
+									DC.date_ymd 								AS eventDate 
+									,SUBSTR(DC.date_ymd , 6,2)				AS eventDateGroup
+			                        ,DC. code_id 									AS eventCode
+			                        ,DC. code_name 							AS eventCodeName
+			                        ,IFNULL(E.event_count,0)					AS eventCount
+			                        ,E.event_count								AS eventCountNull
+			                        
+			FROM (
+			                        SELECT 
+			                                                  	DT.date_ymd 
+			                                                  	,EC. code_id
+			                                                  	,EC. code_name 
+			                        FROM 				
+			                                                    (
+			                                                                    SELECT                   
+			                                                                                        CONCAT(#{searchMonth}, '-', IF(month < 10,CONCAT('0',month),month)) as date_ymd
+			                                                                    FROM 		 
+			                                                                                    
+			                                                                                        (
+			                                                                                           SELECT 1 AS month UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9  UNION ALL SELECT 10  UNION ALL SELECT 11  UNION ALL SELECT 12
+			                                                                                        ) AS A
+			                                                    ) AS DT ,
+			                                                    (
+			                                                                    SELECT
+			                                                                                        C.code_id ,
+			                                                                                        C.code_name
+			                                                                    FROM		   tb_code C
+			                                                                    WHERE   	  C.parent_code_id = 'EVENT'
+			                                                                    AND     	     C.code_use_yn    = 'Y'
+		]]>
+															<if test=' searchMonthCode != null and searchMonthCode != "" '>
+																<![CDATA[ AND C.code_id = #{searchMonthCode} ]]>
+															</if>
+		<![CDATA[                   
+			                                             
+			                                                    ) AS EC
+			) DC
+			 LEFT JOIN
+			                        (
+			
+			                        	SELECT
+			                                   			    DATE_FORMAT(E.event_time, '%Y-%m') 		AS event_time 
+			                                   			    ,count(0)                              				AS event_count
+			                                                ,E.event_code
+			                          	FROM             tb_event E
+			                          	WHERE           1=1
+			                          	AND				   DATE_FORMAT(E.event_time, '%Y') =  #{searchMonth}
+		]]>
+					<if test=' searchMonthCode != null and searchMonthCode != "" '>
+						<![CDATA[ AND E.event_code = #{searchMonthCode} ]]>
+					</if>
+		<![CDATA[           
+			                          	GROUP BY 	 DATE_FORMAT(E.event_time, '%Y-%m'),
+			                                   				  E.event_code
+			                        ) E	
+			ON 					(
+										DC.date_ymd = E.event_time 
+			                            AND 
+			                           DC.code_id =  E.event_code
+									)
+			ORDER BY 		DC.date_ymd ASC, DC. code_id ASC
+		]]>
+	</select>
+	
+	<select id="getEventStatsYearList" parameterType="CommonVO" resultType="EventStatsVO">
+		<![CDATA[ 
+			SELECT  		
+									DC.date_ymd 								AS eventDate 
+									,DC.date_ymd 	 							AS eventDateGroup
+			                        ,DC. code_id 									AS eventCode
+			                        ,DC. code_name 							AS eventCodeName
+			                        ,IFNULL(E.event_count,0)					AS eventCount
+			                        ,E.event_count								AS eventCountNull
+			                        
+			FROM (
+			                        SELECT 
+			                                                  	DATE_FORMAT(DT.date_ymd, '%Y' ) AS date_ymd
+			                                                  	,EC. code_id
+			                                                  	,EC. code_name 
+			                        FROM 				
+			                                                    (
+			                                                                    SELECT                   
+			                                                                                        CURDATE() - INTERVAL (A.a + (10 * B.a) + (100 * C.a) + (1000 * D.a)  - 5000) DAY as date_ymd
+			                                                                    FROM 		 
+			                                                                                    
+			                                                                                        (
+			                                                                                            SELECT		0 AS a UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
+			                                                                                        ) AS A
+			                                                                                        CROSS JOIN (
+			                                                                                              SELECT 	0 AS a UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
+			                                                                                        ) AS B
+			                                                                                        CROSS JOIN (
+			                                                                                              SELECT 	0 AS a UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
+			                                                                                        ) AS C
+			                                                                                        CROSS JOIN (
+			                                                                                              SELECT 	0 AS a UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
+			                                                                                        ) AS D
+			                                                    ) AS DT ,
+			                                                    (
+			                                                                    SELECT
+			                                                                                        C.code_id ,
+			                                                                                        C.code_name
+			                                                                    FROM		   tb_code C
+			                                                                    WHERE   	  C.parent_code_id = 'EVENT'
+			                                                                    AND     	     C.code_use_yn    = 'Y'
+		]]>
+															<if test=' searchYearCode != null and searchYearCode != "" '>
+																<![CDATA[ AND C.code_id = #{searchYearCode} ]]>
+															</if>
+		<![CDATA[              
+			                                                    ) AS EC
+			                        WHERE    			1=1
+			                        AND         			DT.date_ymd BETWEEN CONCAT(#{searchYear},'-01-01') AND CONCAT(#{searchYearEnd},'-12-31')
+			                        GROUP BY 			DATE_FORMAT(DT.date_ymd, '%Y' ), EC. code_id, EC. code_name 
+			) DC
+			 LEFT JOIN
+			                        (
+			
+			                        	SELECT
+			                                   			    DATE_FORMAT(E.event_time, '%Y') 		AS event_time 
+			                                   			    ,count(0)                              				AS event_count
+			                                                ,E.event_code
+			                          	FROM             tb_event E
+			                          	WHERE           1=1
+										AND				DATE_FORMAT(E.event_time, '%Y') >= #{searchYear}
+										AND DATE_FORMAT(E.event_time, '%Y') <= #{searchYearEnd}
+		]]>
+					<if test=' searchYearCode != null and searchYearCode != "" '>
+						<![CDATA[ AND E.event_code = #{searchYearCode} ]]>
+					</if>
+		<![CDATA[     
+			                          	GROUP BY 	 DATE_FORMAT(E.event_time, '%Y'),
+			                                   				  E.event_code
+			                        ) E	
+			ON 					(
+										DC.date_ymd = E.event_time 
+			                            AND 
+			                           DC.code_id =  E.event_code
+									)
+			ORDER BY 		DC.date_ymd ASC, DC. code_id ASC
+		]]>
+	</select>
+</mapper>

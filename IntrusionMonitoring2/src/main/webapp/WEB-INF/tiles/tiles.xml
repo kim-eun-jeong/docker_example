@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+
+<tiles-definitions>
+
+    <definition name="loginTemplate" template="/WEB-INF/views/tiles/layout/loginLayout.jsp">
+    	<put-attribute name="header" value="/WEB-INF/views/tiles/header.jsp" />
+    	<put-attribute name="resource" value="/WEB-INF/views/tiles/resource.jsp" />
+		<put-attribute name="content" value="" />
+    </definition>
+    
+    <definition name="mainTemplate" template="/WEB-INF/views/tiles/layout/mainLayout.jsp">
+    	<put-attribute name="header" value="/WEB-INF/views/tiles/header.jsp" />
+    	<put-attribute name="resource" value="/WEB-INF/views/tiles/resource.jsp" />
+    	<put-attribute name="menu" value="/WEB-INF/views/tiles/menu.jsp" />
+		<put-attribute name="left" value="/WEB-INF/views/tiles/left.jsp" />
+		<put-attribute name="content" value="" />
+    </definition>
+    
+    <definition name="baseTemplate" template="/WEB-INF/views/tiles/layout/baseLayout.jsp">
+    	<put-attribute name="header" value="/WEB-INF/views/tiles/header.jsp" />
+    	<put-attribute name="resource" value="/WEB-INF/views/tiles/resource.jsp" />
+    	<put-attribute name="menu" value="/WEB-INF/views/tiles/menu.jsp" />
+		<put-attribute name="navi" value="/WEB-INF/views/tiles/navi.jsp" />
+		<put-attribute name="left" value="/WEB-INF/views/tiles/left.jsp" />
+		<put-attribute name="content" value="" />
+    </definition>
+    
+    <definition name="noneTemplate" template="/WEB-INF/views/tiles/layout/noneLayout.jsp">
+    	<put-attribute name="header" value="/WEB-INF/views/tiles/header.jsp" />
+    	<put-attribute name="resource" value="/WEB-INF/views/tiles/resource.jsp" />
+		<put-attribute name="content" value="" />
+    </definition>
+    
+    <definition name="contentTemplat" template="/WEB-INF/views/tiles/layout/contentLayout.jsp">
+   		<put-attribute name="content" value="" />
+    </definition>
+
+	<!-- name은 뷰이름으로 맵핑된다. -->
+    <definition name="*/content/*" extends="contentTemplat">
+        <put-attribute name="content" value="/WEB-INF/views/{1}/content/{2}.jsp" />
+    </definition>
+
+ 	<definition name="login" extends="loginTemplate">
+		<put-attribute name="content" value="/WEB-INF/views/common/login.jsp" />
+	</definition>
+	
+	<definition name="member/passwordChange" extends="noneTemplate">
+		<put-attribute name="content" value="/WEB-INF/views/member/passwordChange.jsp" />
+	</definition>
+
+ 	<definition name="monitoring" extends="mainTemplate">
+        <put-attribute name="content" value="/WEB-INF/views/monitoring/main.jsp" />
+    </definition>
+
+    <definition name="*/*" extends="baseTemplate">
+        <put-attribute name="content" value="/WEB-INF/views/{1}/{2}.jsp" />
+    </definition>
+
+</tiles-definitions>
+
+
+

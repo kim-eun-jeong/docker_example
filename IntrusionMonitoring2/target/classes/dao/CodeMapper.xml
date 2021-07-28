@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="kr.co.enitt.intrusionMonitoring.dao.CodeDAO">
+	<sql id="base_code_column">
+		A.code_id 			AS codeId
+		,A.code_name		AS codeName 
+		,A.parent_code_id	AS parentCodeId 
+		,A.code_level		AS codeLevel
+		,A.code_order		AS codeOrder
+		,A.code_use_yn		AS codeUseYn
+		,A.register_date	AS registerDate
+		,A.register_id		AS registerId 
+		,A.register_ip		AS registerIp
+		,A.update_date		AS updateDate
+		,A.update_id		AS updateId
+		,A.update_ip		AS updateIp
+	</sql>
+	
+	<select id="getCodeList" parameterType="CommonVO" resultType="CodeVO">
+		<![CDATA[ 
+			SELECT 
+		]]>
+		<include refid="base_code_column" />
+		<![CDATA[ 
+			FROM
+				tb_code A
+			WHERE	1=1
+			AND	A.code_use_yn = 'Y'
+		]]>
+		<if test='codeId != null and  codeId != "" '>
+			<![CDATA[ AND A.code_id = #{codeId} ]]>
+		</if>
+		<if test='codeName != null and  codeName != "" '>
+			<![CDATA[ AND A.code_name = #{codeName} ]]>
+		</if>
+		<if test='parentCode != null and  parentCode != "" '>
+			<![CDATA[ AND A.parent_code_id = #{parentCode} ]]>
+		</if>
+	</select>
+	
+	<select id="getCodeDetail" parameterType="CodeVO" resultType="CodeVO">
+		<![CDATA[ 
+			SELECT 
+		]]>
+		<include refid="base_code_column" />
+		<![CDATA[ 
+			FROM
+				tb_code A
+			WHERE	1=1
+		]]>
+		<if test='codeId != null and codeId != ""'>
+			<![CDATA[ AND A.code_id = #{codeId} ]]>
+		</if>
+	</select>
+
+	<insert id="createCode" parameterType="CodeVO">
+		<![CDATA[ 
+			INSERT INTO
+			tb_code(
+					code_name
+					,parent_code_id
+					,code_level
+					,code_order
+					,code_use_yn
+					,register_date
+					,register_id
+					,register_ip
+			)
+			VALUES (
+					#{codeName}
+					,#{parentCodeId}
+					,#{codeLevel}
+					,#{codeOrder}
+					,#{codeUseYn}
+					,NOW() 
+					,#{registerId}
+					,#{registerIp}
+			)
+		]]>
+	</insert>
+	
+	<update id="updateCode" parameterType="CodeVO">
+		<![CDATA[ 
+			UPDATE tb_code
+			SET 
+					code_name		= #{codeName}
+					,code_order		= #{codeOrder}
+					,code_use_yn	= #{codeUseYn}
+					,register_date	= NOW()
+					,register_id	= #{updateId}
+					,register_ip	= #{updateIp}
+			WHERE	code_id = #{codeId}	
+		]]>
+	</update>
+
+	
+	<delete id="deleteCode" parameterType="CodeVO">
+		<![CDATA[ 
+			DELETE FROM tb_code
+			WHERE	code_id = #{codeId}	
+		]]>
+	</delete>
+
+
+</mapper>

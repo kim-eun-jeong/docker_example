@@ -1,0 +1,303 @@
+@charset "utf-8";
+
+@font-face {font-family: 'NanumMyeongjo'; font-style: normal; font-weight: 400; src: url('font/NanumMyeongjo.eot'); src: local(��), url('font/NanumMyeongjo.woff') format("woff"); }
+
+/*** �˾� ***/
+
+.popup {
+
+ width:23.5%;
+
+ float:left;
+
+ height:230px;
+
+ position:relative;
+
+ overflow:hidden;
+
+ margin-left:2%;
+
+}
+
+.popup div span {
+
+ display:inline-block;
+
+ position:absolute;
+
+ right:20px;
+
+}
+
+.popup p {
+
+ margin:15px 0 0 2px
+
+}
+
+.popup p img {
+
+ max-width:100%
+
+}
+
+.popup.popup-type2 {
+
+ position:relative;
+
+ float:right;
+
+}
+
+.popup li span {
+
+ display:block;
+
+ position:absolute;
+
+ bottom:25px;
+
+ left:25px;
+
+ background:url(../images/main/ktxmagazine-go.png) no-repeat;
+
+ width:43px;
+
+ height:43px;
+
+ text-indent:-9999px;
+
+ transition:all 0.3s ease-in
+
+}
+
+.popup li a {
+
+ transition:all 0.3s ease-in
+
+}
+
+.popup li a:hover span {
+
+ background-position:-43px 0
+
+}
+
+.popup .vi_control {
+
+ position:absolute;
+
+ width:100%;
+
+ height:35px;
+
+ z-index:20;
+
+ right:0;
+
+ bottom:0px;
+
+ background:#fff;
+
+ border-bottom:1px solid #dedede;
+
+ border-left:1px solid #dedede;
+
+ border-right:1px solid #dedede;
+
+ box-sizing:border-box
+
+}
+
+.popup .vi_control a[class*="btn_"] {
+
+ width:14px;
+
+ height:14px;
+
+ background:url(../images/main/control-type2.png) no-repeat 0 top;
+
+ position:absolute;
+
+ left:32px;
+
+ top:10px;
+
+}
+
+.popup .vi_control a[class*="btn_"] span {
+
+ width:0;
+
+ height:0;
+
+ line-height:0;
+
+ font-size:0px;
+
+ float:left;
+
+ position:absolute;
+
+ visibility:hidden;
+
+ overflow:hidden;
+
+}
+
+.popup .vi_control a.btn_play {
+
+ background-position:-16px 0;
+
+ display:block;
+
+ left:15px
+
+}
+
+.popup .vi_control ul {
+
+ position:absolute;
+
+ right:10px;
+
+ top:13px;
+
+ width:auto;
+
+ height:18px;
+
+ text-align:center;
+
+ z-index:9
+
+}
+
+.popup .vi_control ul li {
+
+ display:block;
+
+ margin-right:6px;
+
+ z-index:20;
+
+ position:relative;
+
+ width:auto;
+
+ height:auto;
+
+ top:auto;
+
+ left:auto;
+
+ float:left;
+
+}
+
+.popup .vi_control ul li a {
+
+ overflow:hidden;
+
+ display:block;
+
+ width:6px;
+
+ height:6px;
+
+ text-indent:-10000px;
+
+ background:#6d6d6d;
+
+ transition:all .3s ease-in;
+
+ border-radius:9px;
+
+ opacity:0.6
+
+}
+
+.popup .vi_control ul li a.on {
+
+ opacity:1;
+
+ margin:-2px 0 0 0;
+
+ padding:2px;
+
+ background:#3262ad
+
+}
+
+.popup .vi_control ul li a:hover,.popup .vi_control ul li a:active {
+
+ opacity:1;
+
+}
+
+.popup .visual_list {
+
+ width:100%;
+
+ height:100%;
+
+ position:absolute;
+
+ overflow:hidden;
+
+}
+
+.popup .visual_list li {
+
+ width:100%;
+
+ height:100%;
+
+ position:absolute;
+
+ left:0;
+
+ top:0;
+
+ opacity:0;
+
+ z-index:1;
+
+}
+
+.popup .visual_list li:first-child {
+
+ display:block;
+
+ opacity:1;
+
+ z-index:2;
+
+}
+
+.popup .visual_list li a {
+
+ display:block;
+
+ height:100%;
+
+ position:relative;
+
+ overflow:hidden;
+
+}
+
+.popup .visual_list li a img {
+
+ display:block;
+
+ position:absolute;
+
+ left:0;
+
+ top: 0;
+
+}
+
+

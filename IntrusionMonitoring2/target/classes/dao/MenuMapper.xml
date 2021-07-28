@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.enitt.intrusionMonitoring.dao.MenuDAO">
+	<sql id="base_menu_column"> 
+		 M.menu_id				AS menuId
+		 ,M.menu_name			AS menuName
+		 ,M.parent_menu_id		AS parentMenuId
+		 ,M.menu_level			AS menuLevel
+		 ,M.menu_order			AS menuOrder
+		 ,M.menu_url				AS menuUrl
+		 ,M.menu_use_yn		AS menuUseYn
+		 ,M.menu_auth			AS menuAuth
+		 ,M.menu_title			AS menuTitle
+		 ,M.register_date		AS registerDate
+		 ,M.register_id			AS registerId
+		 ,M.register_ip			AS registerIp
+		 ,M.update_date			AS updateDate
+		 ,M.update_id			AS updateId
+		 ,M.update_ip			AS updateIp
+	</sql>
+	
+	<sql id="base_parent_menu_column"> 
+		 PM.menu_name		AS parentMenuName
+		 ,PM.menu_level			AS parentMenuLevel
+		 ,PM.menu_order		AS parentMenuOrder
+		 ,PM.menu_url			AS parentMenuUrl
+		 ,PM.menu_use_yn		AS parentMenuUseYn
+		 ,PM.menu_auth			AS parentMenuAuth
+		 ,PM.menu_title			AS parentMenuTitle
+	</sql>
+	
+	<select id="getMenuList" parameterType="MenuVO" resultType="MenuVO">
+		<![CDATA[ 
+			SELECT 
+		]]>
+		<include refid="base_menu_column" />
+		<![CDATA[ 
+			FROM 	tb_menu M
+			WHERE 	1=1
+			AND  	M.menu_use_yn = 'Y'
+			ORDER BY M.menu_level , M.parent_menu_id, M.menu_order 
+		]]>
+	</select>
+	
+	<select id="getMenu" parameterType="MenuVO" resultType="MenuVO">
+		<![CDATA[ 
+			SELECT 
+		]]>
+		<include refid="base_menu_column" />
+		,<include refid="base_parent_menu_column" /> 
+		<![CDATA[ 
+			FROM 	tb_menu M
+			LEFT JOIN tb_menu PM
+			ON M.parent_menu_id = PM.menu_id
+			WHERE 	1=1
+			AND  	M.menu_use_yn = 'Y'
+			AND		M.menu_title = #{menuTitle}
+		]]>
+	</select>
+</mapper>

@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.enitt.intrusionMonitoring.dao.MemberDAO">
+	<sql id="base_member_column">
+		U.id 					AS id
+		,U.password 			AS password
+		,U.name 				AS name
+		,U.email 				AS email
+		,U.auth 				AS auth
+		,U.password_change_yn	AS passwordChangeYn
+		,U.department 			AS department
+		,U.use_yn 				AS useYn
+		,U.register_date 		AS registerDate
+		,U.register_id 			AS registerId
+		,U.register_ip 			AS registerIp
+		,U.update_date 			AS updateDate
+		,U.update_id 			AS updateId
+		,U.update_ip 			AS updateIp
+	</sql>
+	
+	<sql id="base_member_code_column">
+		UC.code_name 			AS authNm
+	</sql>
+	<sql id="base_member_code2_column">
+		UC2.code_name 			AS departmentNm
+	</sql>
+	
+	<select id="getMemberList" parameterType="CommonVO" resultType="MemberVO">
+		<![CDATA[ 
+			SELECT 
+		]]>
+		<include refid="base_member_column" />,
+		<include refid="base_member_code_column" />,
+		<include refid="base_member_code2_column" />
+		<![CDATA[ 
+			FROM	tb_user U
+			LEFT JOIN tb_code UC
+			ON	(
+			UC.code_id = U.auth
+			AND UC.parent_code_id = 'AUTH'
+			AND UC.code_use_yn = 'Y'
+			)
+			LEFT JOIN tb_code UC2
+			ON	(
+			UC2.code_id = U.department
+			AND UC2.parent_code_id = 'DEPT'
+			AND UC2.code_use_yn = 'Y'
+			)
+			WHERE	1=1
+		]]>
+		<if test='searchType == null or searchType == "" '>
+			<if test='searchWord != null and searchWord != "" '>
+				<![CDATA[ 
+						AND (
+							U.id LIKE CONCAT('%', #{searchWord},'%') 
+							OR
+							U.name LIKE CONCAT('%', #{searchWord},'%')
+							OR
+							UC2.code_name LIKE CONCAT('%', #{searchWord},'%')
+						)
+				]]>
+			</if>
+		</if>
+		<if test='searchType != null and searchType != "" and searchType == "ID" '>
+			<![CDATA[ AND U.id LIKE CONCAT('%', #{searchWord},'%') ]]>
+		</if>
+		<if test='searchType != null and searchType != "" and searchType == "NAME" '>
+			<![CDATA[ AND U.name LIKE CONCAT('%', #{searchWord},'%') ]]>
+		</if>
+		<if test='searchType != null and searchType != "" and searchType == "DEPARTMENT" '>
+			<![CDATA[ AND UC2.code_name LIKE CONCAT('%', #{searchWord},'%') ]]>
+		</if>
+		<![CDATA[ 
+			ORDER BY U.register_date DESC 
+		]]>
+	</select>
+	
+	<select id="getMemberPagingList" parameterType="CommonVO" resultType="MemberVO">
+		<![CDATA[ 
+			SELECT 
+		]]>
+		<include refid="base_member_column" />,
+		<include refid="base_member_code_column" />,
+		<include refid="base_member_code2_column" />
+		<![CDATA[ 
+			FROM	tb_user U
+			LEFT JOIN tb_code UC
+			ON	(
+			UC.code_id = U.auth
+			AND UC.parent_code_id = 'AUTH'
+			AND UC.code_use_yn = 'Y'
+			)
+			LEFT JOIN tb_code UC2
+			ON	(
+			UC2.code_id = U.department
+			AND UC2.parent_code_id = 'DEPT'
+			AND UC2.code_use_yn = 'Y'
+			)
+			WHERE	1=1
+		]]>
+		<if test='searchType == null or searchType == "" '>
+			<if test='searchWord != null and searchWord != "" '>
+				<![CDATA[ 
+						AND (
+							U.id LIKE CONCAT('%', #{searchWord},'%') 
+							OR
+							U.name LIKE CONCAT('%', #{searchWord},'%')
+							OR
+							UC2.code_name LIKE CONCAT('%', #{searchWord},'%')
+						)
+				]]>
+			</if>
+		</if>
+		<if test='searchType != null and searchType != "" and searchType == "ID" '>
+			<![CDATA[ AND U.id LIKE CONCAT('%', #{searchWord},'%') ]]>
+		</if>
+		<if test='searchType != null and searchType != "" and searchType == "NAME" '>
+			<![CDATA[ AND U.name LIKE CONCAT('%', #{searchWord},'%') ]]>
+		</if>
+		<if test='searchType != null and searchType != "" and searchType == "DEPARTMENT" '>
+			<![CDATA[ AND UC2.code_name LIKE CONCAT('%', #{searchWord},'%') ]]>
+		</if>
+		<![CDATA[ 
+			ORDER BY U.register_date DESC 
+			LIMIT ${startNum}, ${pageSize}
+		]]>
+	</select>
+	
+	<select id="getMemberListCnt" parameterType="CommonVO" resultType="int">
+		<![CDATA[ 
+			SELECT 
+					count(0) AS cnt
+			FROM	tb_user U
+			LEFT JOIN tb_code UC
+			ON	(
+			UC.code_id = U.auth
+			AND UC.parent_code_id = 'AUTH'
+			AND UC.code_use_yn = 'Y'
+			)
+			LEFT JOIN tb_code UC2
+			ON	(
+			UC2.code_id = U.department
+			AND UC2.parent_code_id = 'DEPT'
+			AND UC2.code_use_yn = 'Y'
+			)
+			WHERE	1=1
+		]]>
+		<if test='searchType != null and searchType != "" and searchType == "ID" '>
+			<![CDATA[ AND U.id LIKE CONCAT('%', #{searchWord},'%') ]]>
+		</if>
+		<if test='searchType != null and searchType != "" and searchType == "NAME" '>
+			<![CDATA[ AND U.name LIKE CONCAT('%', #{searchWord},'%') ]]>
+		</if>
+		<if test='searchType != null and searchType != "" and searchType == "DEPARTMENT" '>
+			<![CDATA[ AND UC2.code_name LIKE CONCAT('%', #{searchWord},'%') ]]>
+		</if>
+	</select>
+	
+	<select id="getMemberDetail" parameterType="CommonVO" resultType="MemberVO">
+		<![CDATA[ 
+			SELECT 
+		]]>
+		<include refid="base_member_column" />,
+		<include refid="base_member_code_column" />,
+		<include refid="base_member_code2_column" />
+		<![CDATA[ 
+			FROM	tb_user U
+			LEFT JOIN tb_code UC
+			ON	(
+			UC.code_id = U.auth
+			AND UC.parent_code_id = 'AUTH'
+			AND UC.code_use_yn = 'Y'
+			)
+			LEFT JOIN tb_code UC2
+			ON	(
+			UC2.code_id = U.department
+			AND UC2.parent_code_id = 'DEPT'
+			AND UC2.code_use_yn = 'Y'
+			)
+			WHERE	1=1
+		]]>
+		<if test='id != null and id != ""'>
+			<![CDATA[ AND U.id = #{id} ]]>
+		</if>
+		<if test='password != null and password != ""'>
+			<![CDATA[ AND U.password = #{password} ]]>
+		</if>
+	</select>
+	
+	<insert id="saveMember" parameterType="MemberVO">
+		<![CDATA[ 
+			INSERT INTO   
+			tb_user(
+			        id 
+		]]>
+		<if test='password != null and password != ""'>
+			<![CDATA[ ,password ]]>
+		</if>
+		<![CDATA[ 
+			        ,name
+			        ,email
+			        ,auth
+			        ,password_change_yn
+			        ,department
+			        ,use_yn
+			        ,register_date 
+			        ,register_id
+			        ,register_ip
+			)VALUES(
+			        #{id}
+		]]>
+		<if test='password != null and password != ""'>
+			<![CDATA[  ,#{password}  ]]>
+		</if>	       
+		<![CDATA[ 
+			        ,#{name}
+			        ,#{email}
+			        ,#{auth}
+			        ,'N'
+			        ,#{department}
+			        ,#{useYn}
+			        ,NOW()
+			        ,#{registerId}
+			        ,#{registerIp}   
+			)       
+			ON DUPLICATE KEY
+			UPDATE 
+					name = #{name}
+		]]>
+		<if test='password != null and password != "" and password != " " '>
+			<![CDATA[  ,password = #{password}   ]]>
+		</if>	  
+		<![CDATA[ 
+			        ,email = #{email}
+			        ,auth = #{auth}
+			        ,department = #{department}
+			        ,use_yn = #{useYn}
+			        ,update_date = NOW()
+			        ,update_id  = #{updateId}
+			        ,update_ip  = #{updateIp}
+        ]]>
+	</insert>
+	<update id="updateMember" parameterType="MemberVO">
+		<![CDATA[ 
+			UPDATE tb_user
+			SET	name = #{name}
+				,email = #{email}
+			WHERE id = #{id}
+		]]>
+	</update>
+	
+	<update id="updatePassword" parameterType="CommonVO">
+		<![CDATA[ 
+			UPDATE tb_user
+			SET	password = #{newPassword}
+		]]>
+		<if test=' passwordChangeYn == "Y" '>
+			<![CDATA[ ,password_change_yn = 'Y' ]]>
+		</if>
+		<![CDATA[ 
+			WHERE id = #{id}
+		]]>
+	</update>
+	
+	<insert id="createLoginLog" parameterType="CommonVO">
+		<![CDATA[ 
+			INSERT INTO
+			tb_login_log(
+				id
+				,login_date
+			)
+			VALUES (
+				#{id}
+				,NOW() 
+			)
+		]]>
+	</insert>
+
+</mapper>

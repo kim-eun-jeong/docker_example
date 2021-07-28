@@ -1,0 +1,117 @@
+@charset "utf-8";
+
+/*** common ***/
+.ani{transition:all 0.3s ease;}
+
+#wrap {height:auto; position:relative;margin:0 auto; max-width:1300px}
+
+.wrap {height: 100%; width: 100%;}
+    
+/*** header ***/
+#header{ height:61px; position:relative; width:100%; background: #2B3C4E 0% 0% no-repeat padding-box;}
+#header .home{ float:left; width:261px;  height: 61px; background: transparent url('/resources/css/lib/images/IntrusionMonitoring.png') 0px 13px no-repeat padding-box; background-size: 100%;}
+#header .home a{padding: 38px 163px;} 
+
+#header .hearder{ float:right;} 
+#header .hearder ul{}
+#header .hearder ul li{ float: left; line-height: 61px; text-align: center;}
+#header .hearder ul li.alarm{ width: 153px; padding-left: 30px; margin-right: 60px; background: url(/resources/css/lib/images/alarm.png) 0px 20px no-repeat; background-size: 19px 19px;}
+#header .hearder ul li.alarm a span{ background: url(/resources/css/lib/images/icon_down.png) 0px 20px no-repeat; padding: 0px 15px 0px 8px; background-position-y: center; background-position-x: right;}
+#header .hearder ul li.alarm  ul li a { display: block; height: 40px; line-height: 40px; background-position-y: center; width: 143px;}
+#header .hearder ul li.alarm  ul li a span{ background: none; padding: 0px 10px 0px 0px; background-position-y: center; background-position-x: right; display: block; float: left; line-height: 40px;}
+
+#header .hearder ul li.clock{width: 164px;}
+#header .hearder ul li.user{ width: 120px; text-align: right; margin-left: 41px;  margin-right: 41px; }
+#header .hearder ul li.user a{background: transparent url(/resources/css/lib/images/icon_user.png) no-repeat; background-position-y: center; padding-left: 25px;}
+#header .hearder ul li.line{ width: 1px; height: 28px; background: #ADADAD 0% 0% no-repeat; position: relative; top: 17px;}
+#header .hearder ul li.login{ width: 100px; margin-left: 41px; margin-right: 41px; font-weight: bold;}
+#header .hearder ul li.login a{background: transparent url(/resources/css/lib/images/icon_logout.png) no-repeat; background-position-y: center; padding-left: 25px;}
+
+#header .hearder ul li.alarm ul{background-color: #2B3C4E; width: 225px; margin-left: -47px;border-top:1px solid #141D26; box-shadow: 0px 2px 3px #0000000D;}
+#header .hearder ul li.alarm ul.eventCnt{ float: left;  position: absolute; z-index: 1000; box-shadow: 0px 10px 11px #00000029;}
+#header .hearder ul li.alarm ul.eventCnt li:nth-child(1)  a{background: url(/resources/css/lib/images/EVENT_01_alarm_icon.png) no-repeat; background-position-x: 19px; background-position-y: center;}
+#header .hearder ul li.alarm ul.eventCnt li:nth-child(2) a{background: url(/resources/css/lib/images/EVENT_02_alarm_icon.png) no-repeat; background-position-x: 19px; background-position-y: center;}
+#header .hearder ul li.alarm ul.eventCnt li:nth-child(3) a{background: url(/resources/css/lib/images/EVENT_03_alarm_icon.png) no-repeat; background-position-x: 19px; background-position-y: center;}
+#header .hearder ul li.alarm ul.eventCnt li:nth-child(4) a{background: url(/resources/css/lib/images/EVENT_04_alarm_icon.png) no-repeat; background-position-x: 19px; background-position-y: center;}
+#header .hearder ul li.alarm ul.eventCnt li:nth-child(5) a{background: url(/resources/css/lib/images/EVENT_05_alarm_icon.png) no-repeat; background-position-x: 19px; background-position-y: center;}
+#header .hearder ul li.alarm ul.eventCnt li:nth-child(6) a{background: url(/resources/css/lib/images/EVENT_06_alarm_icon.png) no-repeat; background-position-x: 19px; background-position-y: center;}
+#header .hearder ul li.alarm ul li{height: 45px; line-height: 45px; width: 100%; text-align: left; border-bottom: 2px solid #445261;}
+#header .hearder ul li.alarm ul li:hover{background-color:#4452618C; cursor:pointer;}
+#header .hearder ul li.alarm ul li a{padding-left: 58px;}
+/* #header .hearder ul li.alarm ul li:last-child{text-align:center;}
+#header .hearder ul li.alarm ul li:last-child  a{padding-left: 0px;} */
+
+
+.alarmList {}
+.alarmList ul{background-color: #2B3C4E; width: 225px; margin-left: -47px;border-top:1px solid #141D26; box-shadow: 0px 2px 3px #0000000D;}
+.alarmList ul.dts{ float: left;  position: absolute; top: 61px; left: 932px; z-index: 1000;}
+.alarmList ul.dts li:nth-child(1)  a{background: url(/resources/css/lib/images/icon_attention.png) no-repeat; background-position-x: 19px;}
+.alarmList ul.dts li:nth-child(2) a{background: url(/resources/css/lib/images/icon_warning.png) no-repeat; background-position-x: 19px;}
+.alarmList ul.das{ float: left;     position: absolute; top: 61px; left: 1160px; z-index: 1000;}
+.alarmList ul.das li:nth-child(1) a{background: url(/resources/css/lib/images/icon_das_event1.png) no-repeat; background-position-x: 19px; }
+.alarmList ul.das li:nth-child(2) a{background: url(/resources/css/lib/images/icon_das_event2.png) no-repeat; background-position-x: 19px;}
+.alarmList ul.das li:nth-child(3) a{background: url(/resources/css/lib/images/icon_das_event3.png) no-repeat; background-position-x: 19px; }
+.alarmList ul.das li:nth-child(4) a{background: url(/resources/css/lib/images/icon_das_event4.png) no-repeat; background-position-x: 19px;}
+.alarmList ul li{height: 40px; line-height: 40px; width: 100%; text-align: left; border-bottom: 2px solid #445261;}
+.alarmList ul li:hover{background-color:#4452618C; cursor:pointer;}
+.alarmList ul li a{padding-left: 50px;}
+.alarmList ul li:last-child{text-align:center;}
+.alarmList ul li:last-child  a{padding-left: 0px;}
+
+/*** left menu ***/
+.left{float:left;width:259px;}
+.left .leftTitle{ height:172px; background: url(/resources/css/lib/images/logo.png) 0% 0% no-repeat padding-box; }
+.left .leftTitle div{width: 100%; text-align: center; font-size: 17px; position: relative; top: 97px;}
+
+#gnb{ width:100%; height:auto; background:#2B3C4E; margin-top:50px;}
+#gnb ul li{ min-height:54px; line-height:54px; text-align: left; font-size: 18px;}
+#gnb ul li.selected{background-color: #FFFFFF; color:#1D3D63; text-shadow: 0px 2px 1px #00000029; letter-spacing: 0px;  font-weight: bold;}
+#gnb ul li:hover{ cursor: pointer; background-color: #FFFFFF; color:#1D3D63; text-shadow: 0px 2px 1px #00000029; letter-spacing: 0px;  font-weight: bold;}
+
+#gnb ul li span {background-position: left; padding-left: 40px; margin-left: 50px;}
+#gnb ul li span.dashboard{background: url(/resources/css/lib/images/left_dashboard_off.png) 0% 0% no-repeat; background-position-y: center;}
+#gnb ul li:hover span.dashboard, #gnb ul li.selected span.dashboard, #gnb ul li.on span.dashboard
+{background: url(/resources/css/lib/images/left_dashboard_on.png) 0% 0% no-repeat; background-position-y: center;}
+#gnb ul li span.event{background: url(/resources/css/lib/images/left_event_off.png) 0% 0% no-repeat; background-position-y: center;}
+#gnb ul li:hover span.event, #gnb ul li.selected span.event, #gnb ul li.on span.event
+{background: url(/resources/css/lib/images/left_event_on.png) 0% 0% no-repeat; background-position-y: center;}
+#gnb ul li span.temp{background: url(/resources/css/lib/images/left_temp_off.png) 0% 0% no-repeat; background-position-y: center;}
+#gnb ul li:hover span.temp, #gnb ul li.selected span.temp, #gnb ul li.on span.temp
+{background: url(/resources/css/lib/images/left_temp_on.png) 0% 0% no-repeat; background-position-y: center;}
+#gnb ul li span.stats{background: url(/resources/css/lib/images/left_stats_off.png) 0% 0% no-repeat; background-position-y: center;}
+#gnb ul li:hover span.stats, #gnb ul li.selected span.stats, #gnb ul li.on span.stats
+{background: url(/resources/css/lib/images/left_stats_on.png) 0% 0% no-repeat; background-position-y: center;}
+#gnb ul li span.setting{background: url(/resources/css/lib/images/left_setting_off.png) 0% 0% no-repeat; background-position-y: center;}
+#gnb ul li:hover span.setting, #gnb ul li.selected span.setting, #gnb ul li.on span.setting
+{background: url(/resources/css/lib/images/left_setting_on.png) 0% 0% no-repeat; background-position-y: center;}
+#gnb ul li span.member{background: url(/resources/css/lib/images/left_member_off.png) 0% 0% no-repeat; background-position-y: center;}
+#gnb ul li:hover span.member, #gnb ul li.selected span.member, #gnb ul li.on span.member
+{background: url(/resources/css/lib/images/left_member_on.png) 0% 0% no-repeat; background-position-y: center;}
+
+#gnb ul li ul { display:none; background:#23303F; padding: 7px 0px;} 
+#gnb ul li ul li { min-height:35px; line-height:35px; font-size: 15px; color: #9F9F9F; background:#23303F !important; }
+#gnb ul li ul li span {background-position: left; padding-left: 40px; margin-left: 50px; background: url(/resources/css/lib/images/left_sub_off.png) 0% 0% no-repeat; background-size: 10px; background-position-y: center;}
+#gnb ul li ul li:hover span, #gnb ul li ul li.selected span { color:#FFFFFF;  font-weight: bold;  background: url(/resources/css/lib/images/left_sub_on.png) 0% 0% no-repeat; background-size: 10px; background-position-y: center;}
+
+.left-footer {position: absolute; top: calc(100% - 40px); width: 259px;}
+.left-footer li:first-child{text-align: center; font-size: 10px; color: #FFFFFF; font-weight: lighter; height : 40px; line-height: 40px;}
+.left-footer li:last-child{text-align: center; font-size: 10px; color: #FFFFFF; font-weight: lighter; height : 20px;}
+
+/*** container ***/
+#container{ background:#2B3C4E; height:calc(100% - 61px);}
+#container:after{ display:block; clear:both; content:""}
+
+.main-wrap { background:#0D253A;  margin-left:259px; height: 100%;}
+.contents-wrap {margin: 0px 18px 18px 18px; height: 1000px;}
+
+#sub_head { width:100%; height:62px;}
+#sub_title {line-height: 62px; color:#FFFFFF; font-size:18px;}
+#sub_title .dashboard{background: url(/resources/css/lib/images/left_dashboard_off.png) 50% 50% no-repeat; padding: 10px; margin-right: 10px;}
+#sub_title .dtsEvent{background: url(/resources/css/lib/images/left_event_off.png) 50% 50% no-repeat; padding: 10px; margin-right: 10px;}
+#sub_title .dasEvent{background: url(/resources/css/lib/images/left_event_off.png) 50% 50% no-repeat; padding: 10px; margin-right: 10px;}
+#sub_title .dtsTemp{background: url(/resources/css/lib/images/left_temp_off.png) 50% 50% no-repeat; padding: 10px; margin-right: 10px;}
+#sub_title .dtsEventStats{background: url(/resources/css/lib/images/left_stats_off.png) 50% 50% no-repeat; padding: 10px; margin-right: 10px;}
+#sub_title .dasEventStats{background: url(/resources/css/lib/images/left_stats_off.png) 50% 50% no-repeat; padding: 10px; margin-right: 10px;}
+#sub_title .zone{background: url(/resources/css/lib/images/left_setting_off.png) 50% 50% no-repeat; padding: 10px; margin-right: 10px;}
+#sub_title .temp{background: url(/resources/css/lib/images/left_setting_off.png) 50% 50% no-repeat; padding: 10px; margin-right: 10px;}
+#sub_title .member{background: url(/resources/css/lib/images/left_member_off.png) 50% 50% no-repeat; padding: 10px; margin-right: 10px;}

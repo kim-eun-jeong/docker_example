@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.enitt.intrusionMonitoring.dao.MonitoringDAO">
+	<sql id="base_map_info_column"> 
+		MI.map_location 				AS location
+		,MI.map_lattitude 				AS lattitude
+		,MI.map_longitude 				AS longitude
+		,MI.map_zone_type				AS zoneType
+		,MI.map_note 					AS note
+	</sql>
+	
+	<select id="getMapInfoList" parameterType="CommonVO" resultType="MonitoringVO">
+		<![CDATA[ 
+			SELECT 
+		]]>
+		<include refid="base_map_info_column" />
+		<![CDATA[ 
+			FROM tb_map_info MI
+		]]>
+	</select>
+	
+	<select id="getEquipmentState" parameterType="CommonVO" resultType="MonitoringVO">
+		<![CDATA[ 
+			SELECT 
+						equipment_id		AS equipmentId
+						,equipment_name	AS equipmentName
+						,equipment_note 	AS  equipmentNote
+						,update_date 		AS  updateDate
+						,CASE 
+							WHEN update_date < DATE_SUB(#{now}, INTERVAL 5 MINUTE) THEN 'ERROR'
+							ELSE equipment_State 
+						END equipmentState
+			FROM	 	tb_equipment_state ES
+			WHERE	1=1
+		]]>
+	</select>
+</mapper>

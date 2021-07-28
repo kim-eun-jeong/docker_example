@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+	<property name="LOG_LEVEL" value="DEBUG" />
+	
+	<!-- Log 저장 경로 설정 -->
+	<property name="LOG_DIR" value="/logs/intrsMntrn" />
+
+	<appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+		<param name="Target" value="System.out" />
+		<encoder>
+			<pattern>[%d{yyyy-MM-dd HH:mm:ss}] [%thread] %-5p: %c - %m%n
+			</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="dailyRolling" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- Log 파일명 설정 -->
+			<fileNamePattern>${LOG_DIR}/%d{yyyyMMdd}.log</fileNamePattern>
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>[%d{yyyy-MM-dd HH:mm:ss}] [%thread] %-5p: %c - %m%n</pattern>
+		</encoder>
+	</appender>
+	
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+      <layout class="ch.qos.logback.classic.PatternLayout">
+        <pattern>%d{yyyy-MM-dd HH:mm:ss} [%-5p] [%F]%M\(%L\) : %m%n</pattern>
+      </layout>
+    </appender>
+
+	<root level="INFO">
+		<appender-ref ref="console" />
+		<appender-ref ref="dailyRolling" />
+	</root>
+	
+	<!-- <root level="DEBUG">
+		<appender-ref ref="console" />
+		<appender-ref ref="STDOUT" />
+	</root> -->
+	
+
+	<!-- <logger name="org.springframework" level="${LOG_LEVEL}">
+		<appender-ref ref="dailyRolling" />
+	</logger> -->
+
+	<logger name="org.mybatis" level="${LOG_LEVEL}">
+		<appender-ref ref="dailyRolling" />
+	</logger>
+	<logger name="kr.co.enitt" level="${LOG_LEVEL}">
+		<appender-ref ref="dailyRolling" />
+	</logger>
+	
+	<logger name="jdbc" level="OFF"/>
+	<logger name="jdbc.sqlonly" level="OFF"/>
+	<logger name="jdbc.sqltiming" level="DEBUG"/>
+	<logger name="jdbc.audit" level="OFF"/>
+	<logger name="jdbc.resultset" level="OFF"/>
+	<logger name="jdbc.resultsettable" level="DEBUG"/>
+	<logger name="jdbc.connection" level="OFF"/>
+
+</configuration>

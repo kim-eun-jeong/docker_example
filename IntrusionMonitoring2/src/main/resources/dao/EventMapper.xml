@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.enitt.intrusionMonitoring.dao.EventDAO">
+	<sql id="base_event_column"> 
+		E.event_id 				AS eventId
+	   	,E.event_time 			AS eventTime
+	    ,E.event_code 			AS eventCode
+	   	,E.event_location			AS eventLocation
+	  	,E.event_zone		    AS eventZone
+	  	,E.event_register_date 			AS registerDate
+	</sql>
+	<sql id="base_event_time_column"> 
+	   	DATE_FORMAT(E.event_time, '%Y')  	AS eventTimeYear
+	   	,DATE_FORMAT(E.event_time, '%m') 	AS eventTimeMonth
+	   	,DATE_FORMAT(E.event_time, '%d') 	AS eventTimeDay
+	   	,DATE_FORMAT(E.event_time, '%H') 	AS eventTimeHour
+	   	,DATE_FORMAT(E.event_time, '%i')  	AS eventTimeMinute
+	   	,DATE_FORMAT(E.event_time, '%s')  	AS eventTimeSecond
+	</sql>
+	
+	<sql id="base_event_code">
+		EC.code_name 			AS eventCodeNm
+	</sql>
+	<sql id="base_event_zone">
+		EC2.code_name 			AS eventZoneNm
+	</sql>
+	
+	
+	<select id="getEventList" parameterType="CommonVO" resultType="EventVO">
+		<![CDATA[ 
+			SELECT 
+		]]>
+		<include refid="base_event_column" />,
+		<include refid="base_event_time_column" />,
+		<include refid="base_event_code" />,
+		<include refid="base_event_zone" />
+		<![CDATA[ 
+			FROM tb_event E
+			LEFT JOIN tb_code EC
+			ON (EC.code_id = E.event_code
+			AND EC.parent_code_id = 'EVENT'
+			AND	EC.code_use_yn = 'Y'
+			)
+			LEFT JOIN tb_code EC2
+			ON (EC2.code_id = E.event_zone
+			AND EC2.parent_code_id = 'ZONE_TYPE'
+			AND	EC2.code_use_yn = 'Y'
+			)
+			WHERE	1=1
+		]]>
+		<if test=' eventTimeStart != null and eventTimeStart != "" '>
+			<![CDATA[ AND date_format(E.event_time, '%Y-%m-%d') >= date_format(#{eventTimeStart}, '%Y-%m-%d') ]]>
+		</if>
+		<if test=' eventTimeEnd != null and eventTimeEnd != "" '>
+			<![CDATA[ AND date_format(E.event_time, '%Y-%m-%d') <= date_format(#{eventTimeEnd}, '%Y-%m-%d') ]]>
+		</if>
+		<if test=' eventLocationStart != null and eventLocationStart != "" '>
+			<![CDATA[ AND E.event_location >= #{eventLocationStart} ]]>
+		</if>
+		<if test=' eventLocationEnd != null and eventLocationEnd != "" '>
+			<![CDATA[ AND E.event_location <= #{eventLocationEnd} ]]>
+		</if>
+		<if test=' eventCode != null and eventCode != "" '>
+			<![CDATA[ AND E.event_code = #{eventCode} ]]>
+		</if>
+		<if test=' eventZone != null and eventZone != "" '>
+			<![CDATA[ AND E.event_zone = #{eventZone} ]]>
+		</if>
+		<if test=' monitoring != null and monitoring != "" '>
+			<![CDATA[ 
+				AND E.event_time >= DATE_SUB(#{now}, INTERVAL 24 HOUR) 
+			]]>
+		</if>
+		<![CDATA[
+			ORDER BY E.event_time DESC 
+		]]>
+	</select>
+	
+	<select id="getEventPagingList" parameterType="CommonVO" resultType="EventVO">
+		<![CDATA[ 
+			SELECT 
+		]]>
+		<include refid="base_event_column" />,
+		<include refid="base_event_time_column" />,
+		<include refid="base_event_code" />,
+		<include refid="base_event_zone" />
+		<![CDATA[ 
+			FROM tb_event E
+			LEFT JOIN tb_code EC
+			ON (EC.code_id = E.event_code
+			AND EC.parent_code_id = 'EVENT'
+			AND	EC.code_use_yn = 'Y'
+			)
+			LEFT JOIN tb_code EC2
+			ON (EC2.code_id = E.event_zone
+			AND EC2.parent_code_id = 'ZONE_TYPE'
+			AND	EC2.code_use_yn = 'Y'
+			)
+			WHERE	1=1
+		]]>
+		<if test=' eventTimeStart != null and eventTimeStart != "" '>
+			<![CDATA[ AND date_format(E.event_time, '%Y-%m-%d') >= date_format(#{eventTimeStart}, '%Y-%m-%d') ]]>
+		</if>
+		<if test=' eventTimeEnd != null and eventTimeEnd != "" '>
+			<![CDATA[ AND date_format(E.event_time, '%Y-%m-%d') <= date_format(#{eventTimeEnd}, '%Y-%m-%d') ]]>
+		</if>
+		<if test=' eventLocationStart != null and eventLocationStart != "" '>
+			<![CDATA[ AND E.event_location >= #{eventLocationStart} ]]>
+		</if>
+		<if test=' eventLocationEnd != null and eventLocationEnd != "" '>
+			<![CDATA[ AND E.event_location <= #{eventLocationEnd} ]]>
+		</if>
+		<if test=' eventCode != null and eventCode != "" '>
+			<![CDATA[ AND E.event_code = #{eventCode} ]]>
+		</if>
+		<if test=' eventZone != null and eventZone != "" '>
+			<![CDATA[ AND E.event_zone = #{eventZone} ]]>
+		</if>
+		<if test=' monitoring != null and monitoring != "" '>
+			<![CDATA[ 
+				AND E.event_time >= DATE_SUB(#{now}, INTERVAL 24 HOUR) 
+			]]>
+		</if>
+		<![CDATA[ 
+			ORDER BY E.event_time DESC 
+			LIMIT ${startNum}, ${pageSize}
+		]]>
+	</select>
+	
+	<select id="getEventListCnt" parameterType="CommonVO" resultType="int">
+		<![CDATA[ 
+			SELECT 
+					count(0)
+			FROM tb_event E
+			LEFT JOIN tb_code EC
+			ON (EC.code_id = E.event_code
+			AND EC.parent_code_id = 'EVENT'
+			AND	EC.code_use_yn = 'Y'
+			)
+			LEFT JOIN tb_code EC2
+			ON (EC2.code_id = E.event_zone
+			AND EC2.parent_code_id = 'ZONE_TYPE'
+			AND	EC2.code_use_yn = 'Y'
+			)
+			WHERE	1=1
+		]]>
+		<if test=' eventTimeStart != null and eventTimeStart != "" '>
+			<![CDATA[ AND date_format(E.event_time, '%Y-%m-%d') >= date_format(#{eventTimeStart}, '%Y-%m-%d') ]]>
+		</if>
+		<if test=' eventTimeEnd != null and eventTimeEnd != "" '>
+			<![CDATA[ AND date_format(E.event_time, '%Y-%m-%d') <= date_format(#{eventTimeEnd}, '%Y-%m-%d') ]]>
+		</if>
+		<if test=' eventLocationStart != null and eventLocationStart != "" '>
+			<![CDATA[ AND E.event_location >= #{eventLocationStart} ]]>
+		</if>
+		<if test=' eventLocationEnd != null and eventLocationEnd != "" '>
+			<![CDATA[ AND E.event_location <= #{eventLocationEnd} ]]>
+		</if>
+		<if test=' eventCode != null and eventCode != "" '>
+			<![CDATA[ AND E.event_code = #{eventCode} ]]>
+		</if>
+		<if test=' eventZone != null and eventZone != "" '>
+			<![CDATA[ AND E.event_zone = #{eventZone} ]]>
+		</if>
+		<if test=' monitoring != null and monitoring != "" '>
+			<![CDATA[ 
+				AND E.event_time >= DATE_SUB(#{now}, INTERVAL 24 HOUR) 
+			]]>
+		</if>
+		<if test=' lastTime != null and lastTime != "" '>
+			<![CDATA[ 
+		 		AND    E.event_time >=  DATE_FORMAT(#{lastTime} , '%Y-%m-%d %H:%i:%s')
+			]]>
+		</if>
+	</select>
+	
+	<select id="getEventCntList" parameterType="CommonVO" resultType="EventVO">
+		<![CDATA[ 
+			SELECT   		EC.code_id AS codeId
+				        	,EC.code_name AS codeName
+				        	,ifnull(E.cnt,0) AS eventCnt
+			FROM     	tb_code EC
+			LEFT JOIN	( 
+							SELECT  
+										count(0) as cnt ,
+			                           	event_code
+			                FROM     tb_event
+			                WHERE    1=1
+		]]>
+		<if test=' monitoring != null and monitoring != "" '>
+			<![CDATA[ 
+				AND event_time >= DATE_SUB(#{now}, INTERVAL 24 HOUR) 
+			]]>
+		</if>
+		<![CDATA[ 
+			                GROUP BY event_code
+			                ) AS E
+			ON       		E.event_code = EC.code_id
+			WHERE    	EC.parent_code_id     = 'EVENT'
+			AND      		EC.code_use_yn        = 'Y'
+			ORDER BY 	EC.code_id
+		]]>
+	</select>
+	
+	<select id="getEventDetail" parameterType="CommonVO" resultType="EventVO">
+		<![CDATA[ 
+			SELECT 
+		]]>
+		<include refid="base_event_column" />,
+		<include refid="base_event_time_column" />,
+		<include refid="base_event_code" />,
+		<include refid="base_event_zone" />
+		<![CDATA[ 
+			FROM tb_event E
+			LEFT JOIN tb_code EC
+			ON (EC.code_id = E.event_code
+			AND EC.parent_code_id = 'EVENT'
+			AND	EC.code_use_yn = 'Y'
+			)
+			LEFT JOIN tb_code EC2
+			ON (EC2.code_id = E.event_zone
+			AND EC2.parent_code_id = 'ZONE_TYPE'
+			AND	EC2.code_use_yn = 'Y'
+			)
+			WHERE	1=1
+			AND E.event_id = #{eventId}
+		]]>
+	</select>
+	
+	<update id="setEventLocationUpdate" parameterType="CommonVO">
+		<![CDATA[ 
+			UPDATE tb_event
+			SET event_location = 
+			CASE event_code
+				WHEN  'EVENT_01' THEN FLOOR(8 + (RAND() * 3)) 
+				WHEN  'EVENT_02' THEN FLOOR(10 + (RAND() * 1)) 
+				WHEN  'EVENT_03' THEN FLOOR(12 + (RAND() * 2)) 
+				WHEN  'EVENT_04' THEN FLOOR(8 + (RAND() * 2)) 
+				WHEN  'EVENT_05' THEN FLOOR(17 + (RAND() * 2)) 
+				WHEN  'EVENT_06' THEN FLOOR(16 + (RAND() * 1)) 
+			    ELSE  1 
+			END
+			WHERE event_location = 1;
+		]]>
+	</update>
+</mapper>

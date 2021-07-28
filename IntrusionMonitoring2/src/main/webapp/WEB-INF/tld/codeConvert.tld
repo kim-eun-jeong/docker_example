@@ -1,0 +1,25 @@
+<taglib version="2.0" xmlns="http://java.sun.com/xml/ns/j2ee" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee web-jsptaglibrary_2_0.xsd">
+	<tlib-version>1.0</tlib-version>
+	<short-name>cd</short-name>
+	<uri>/WEB-INF/tld/codeConvert</uri>
+    <tag>
+        <name>convert</name>
+        <tag-class>com.acorndynamics.acorn.admin.utils.CodeConvertUtil</tag-class>
+        <body-content>JSP</body-content>
+        <info>This Tag Displayes current server date in user defined format</info>
+        <attribute>
+            <name>grpCd</name>
+            <required>true</required>
+            <description>group code for code</description>
+            <rtexprvalue>false</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>direction</name>
+            <required>false</required>
+            <description>converting direction (c2v or c2v)</description>
+            <rtexprvalue>false</rtexprvalue>
+        </attribute>
+    </tag>
+</taglib>
